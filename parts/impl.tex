@@ -1,0 +1,154 @@
+% Pistes d'implémentation
+
+\begin{frame}[c]
+  \frametitle{ASP Implementation}
+
+\tval{ASP}: Declarative programming
+
+\quad Rule: \ex{$head \leftarrow \only<1>{body}\only<2->{A_1, ..., A_n, \neg A_{n+1}, ..., \neg A_m}.$}
+
+\quad Fact: \ex{$head.$}
+
+\quad Constraint: \ex{$\leftarrow body.$}
+
+\quad Aggregate: \ex{$lower~\{~atoms~\}~upper \leftarrow body.$}
+
+\pause[3]
+\bigskip
+Representation of PH / BRNs:
+
+\quad Gene: \ex{$component(a, n).$}
+
+\quad Action: \ex{$action(a, i, b, j, k).$}
+
+\quad Cooperation: \ex{$cooperation(c, a, i, j).$}
+
+\quad Useful rules: \ex{$component\_levels(X, 0..M) \leftarrow component(X, M).$}
+\end{frame}
+
+
+
+% Pistes d'implémentation
+
+\begin{frame}[c]
+  \frametitle{ASP Implementation}
+
+\tval{ASP}: Declarative programming
+
+\quad Rule: \texttt{\ex{head :- \only<1>{body}\only<2->{A$_1$, ..., A$_n$, $\neg$A$_{n+1}$, ..., $\neg$A$_m$}.}}
+
+\quad Fact: \texttt{\ex{head.}}
+
+\quad Constraint: \texttt{\ex{:- body.}}
+
+\pause[3]
+\bigskip
+Example:
+
+\texttt{\ex{%
+~~~node(a). node(b). node(c).\\
+~~~edge(a, b). edge(b, c). edge(a, c).\\
+~~~edge(X,Y) :- edge(Y,X).
+}}
+
+\bigskip
+Solving: find the biggest set of atoms satisfying the problem
+
+\texttt{\console{%
+~~~node(a) node(c) node(b)\\
+~~~edge(a, b) edge(b, c) edge(a, c)\\
+~~~edge(b, a) edge(c, b) edge(c, a)\\
+}}
+
+\end{frame}
+
+
+
+\begin{frame}[c]
+  \frametitle{ASP Implementation}
+
+\tval{Cardinalities}: \quad
+\texttt{\ex{%
+\textit{min} \{ atom : enum \} \textit{max} :- body.
+}}
+
+\pause
+\bigskip
+
+\f Enumerate of all combinations:
+
+\texttt{\ex{%
+~~~color(red;green;blue).\\
+~~~1 {attrib(X,C) : color(C)} 1 :- node(X).
+}}
+
+\texttt{\console{%
+Answer~1:~attrib(b,red) attrib(c,red) attrib(a,red)\\
+Answer~2:~attrib(b,red) attrib(c,red) attrib(a,blue)\\
+Answer~3:~attrib(b,red) attrib(c,green) attrib(a,blue)\\
+~~~$\vdots$\\
+SATISFIABLE: 27 models
+}}
+
+\pause
+\bigskip
+
+\f Then reduce the number of answers with constraints:
+
+\texttt{\ex{%
+~~~:- attrib(X,C), attrib(Y,C), edge(X,Y).
+}}
+
+\texttt{\console{%
+Answer~1:~attrib(b,green) attrib(c,blue) attrib(a,red)\\
+Answer~2:~attrib(b,green) attrib(c,red) attrib(a,blue)\\
+Answer~3:~attrib(b,blue) attrib(c,green) attrib(a,red)\\
+~~~$\vdots$\\
+SATISFIABLE: 6 models
+}}
+
+\end{frame}
+
+
+\begin{frame}[c]
+  \frametitle{Enumerating admissible Parametrizations}
+  \framesubtitle{Implementation}
+
+PH / GRN definitions:
+
+\texttt{\ex{%
+~~~component(a, 2).\\
+~~~component(b, 1).\\
+~~~action(b, 1, a, 1, 2).
+}}
+
+\bigskip
+Useful rules:
+
+\texttt{\ex{%
+~~~component\_levels(X, 0..M) :- component(X, M).\\
+~~~less\_active(X, P, Q) :-}} $K_{\texttt{X},\texttt{P}}$\text{ has less activators than }$K_{\texttt{X},\texttt{Q}}$\texttt{\ex{\\
+~~~param\_inf(X, P, Q) :-}} $K_{\texttt{X},\texttt{P}} \preccurlyeq K_{\texttt{X},\texttt{Q}}$
+
+\pause
+\bigskip
+Parameters enumeration with cardinalities:
+
+\texttt{\ex{%
+~~~1 \{ param(X, P, I) : component\_levels(X, I) \} :-\\
+~~~~~param\_label(X, P).
+}}
+
+[\texttt{X}: component, \texttt{P}: parameter label, \texttt{I}: parameter value]
+
+\pause
+\bigskip
+Parametrizations filtering with constraints:
+
+\texttt{\ex{%
+~~~:- less\_active(X, P, Q), not param\_inf(X, P, Q).
+}}
+
+[\texttt{X}: component, \texttt{P}, \texttt{Q}: parameter labels]
+
+\end{frame}

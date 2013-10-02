@@ -1,0 +1,109 @@
+% Exemples de structures abstraites (graphes de causalité locale)
+
+\begin{frame}
+  \frametitle{Under-approximation}
+
+\def \tu {2}
+\def \tub {3}
+\def \tuf {4}
+
+\begin{columns}
+\begin{column}{0.48\textwidth}
+\begin{center}
+\scalebox{0.55}{
+\begin{tikzpicture}
+\exatt
+\TState{-\tu}{a_1,b_1,c_1,d_0}
+\TState{\tub-}{a_0,b_1,c_0,d_0}
+\node[process,very thick] (d_2) at (d_2.center) {?};
+\end{tikzpicture}
+}
+\end{center}
+
+\end{column}
+\begin{column}{0.52\textwidth}
+
+\vspace{1.5em}
+\tval{Sufficient condition}:
+
+\smallskip
+\begin{itemize}
+  \item no cycle
+  \item \only<-\tu>{each objective has a solution} \only<\tub->{\sout{each objective has a solution}}
+\end{itemize}
+\begin{center}
+  \only<\tu>{\Large\textcolor{darkgreen}{$R$ is \textbf{true}}} \only<\tuf>{\Large\textcolor{darkyellow}{\textbf{Inconclusive}}}
+\end{center}
+
+\end{column}
+\end{columns}
+
+\only<-\tu>{
+\sauyes
+}
+
+\only<\tub->{
+\sauinconc
+}
+
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Over-approximation}
+
+\def \to {4}
+\def \tob {5}
+\def \tof {6}
+\def \tokp {7}
+
+\begin{columns}
+\begin{column}{0.48\textwidth}
+\begin{center}
+\scalebox{0.55}{
+\begin{tikzpicture}
+\exatt
+\TState{-\to}{a_1,b_0,c_0,d_1}
+\TState{\tob-}{a_1,b_1,c_1,d_0}
+\node[process,very thick] (d_2) at (d_2.center) {?};
+\end{tikzpicture}
+}
+\end{center}
+\bigskip
+
+\end{column}
+\begin{column}{0.52\textwidth}
+
+\tval{Necessary condition}:
+
+\smallskip
+\only<2->{
+\only<3-\to>{\sout{There exists a traversal}}\only<2,\tob->{There exists a traversal}
+with no cycle
+
+\smallskip
+\begin{itemize}
+  \item \only<3-\to>{\sout{objective $\rightarrow$ follow one solution}}\only<1-2,\tob->{objective $\rightarrow$ follow one solution}
+  \item solution $\rightarrow$ follow all processes
+  \item process $\rightarrow$ follow all objectives
+\end{itemize}
+\begin{center}
+  \only<\to>{\Large\textcolor{red}{$R$ is \textbf{false}}}\only<\tof->{\Large\textcolor{darkyellow}{\textbf{Inconclusive}}}
+\end{center}
+}
+
+\end{column}
+\end{columns}
+
+%\bigskip
+
+\only<1-\to>{
+\saono
+}
+
+\only<\tob->{
+\saoinconc
+}
+
+\end{frame}
