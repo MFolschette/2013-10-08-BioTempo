@@ -14,32 +14,39 @@ Successive reachability of processes:
 \begin{center}
 \scalebox{0.75}{
 \begin{tikzpicture}
-%\path[use as bounding box] (-1,-3) rectangle (7,2);
-\exatt
+  %\path[use as bounding box] (-1,-3) rectangle (7,2);
+  \exatt
 
-\TState{2-4}{a_0,b_0,b_2,c_0,d_0}
+  \TState{1-5}{a_0,b_0,c_0,d_0}
+  \TState{6}{a_0,b_0,c_1,d_0}
+  \TState{7}{a_0,b_0,c_1,d_1}
+  \TState{8}{a_0,b_1,c_1,d_1}
+  \node<9>[process,very thick] (d_2) at (d_2.center) {};
+  \TState{9}{a_0,b_1,c_1,d_2}
 
-\TState{5}{a_0,b_0,c_0,d_0}
-\TState{6}{a_0,b_0,c_1,d_0}
-\TState{7}{a_0,b_0,c_1,d_1}
-\TState{8}{a_0,b_1,c_1,d_1}
-\TState{9}{a_0,b_1,c_1,d_2}
+  \node<2>[objective] at (d_1.center) {1?};
+  \node<2>[objective] at (d_2.center) {2?};
 
-\node<3>[process,very thick] (d_1) at (d_1.center) {1?};
-\node<3>[process,very thick] (b_1) at (b_1.center) {2?};
-\node<3>[process,very thick] (d_2) at (d_2.center) {3?};
+  \node<3>[objective] at (d_1.center) {1?};
+  \node<3>[objective] at (b_1.center) {2?};
+  \node<3>[objective] at (d_2.center) {3?};
 
-\node<4-8>[process,very thick] (d_2) at (d_2.center) {1?};
-\node<9>[process,very thick] (d_2) at (d_2.center) {};
+  \node<4-8>[objective] at (d_2.center) {1?};
 
-\only<5>{\THit{a_0}{hlhit}{c_0}{.north}{c_1}}
-\path<5>[bounce,bend left,hlhit] \TBounce{c_0}{}{c_1}{.west};
-\only<6>{\THit{b_0}{hlhit}{d_0}{.west}{d_1}}
-\path<6>[bounce,bend left,hlhit] \TBounce{d_0}{}{d_1}{.south};
-\only<7>{\THit{c_1}{bend left=20pt,hlhit}{b_0}{.west}{b_1}}
-\path<7>[bounce,bend left,hlhit] \TBounce{b_0}{}{b_1}{.south};
-\only<8>{\THit{b_1}{hlhit}{d_1}{.west}{d_2}}
-\path<8>[bounce,bend left,hlhit] \TBounce{d_1}{}{d_2}{.south};
+  %\node<3>[process,very thick] (d_1) at (d_1.center) {1?};
+  %\node<3>[process,very thick] (b_1) at (b_1.center) {2?};
+  %\node<3>[process,very thick] (d_2) at (d_2.center) {3?};
+
+  %\node<4-8>[process,very thick] (d_2) at (d_2.center) {1?};
+
+  \only<5>{\THit{a_0}{hlhit}{c_0}{.north}{c_1}}
+  \path<5>[bounce,bend left,hlhit] \TBounce{c_0}{}{c_1}{.west};
+  \only<6>{\THit{b_0}{hlhit}{d_0}{.west}{d_1}}
+  \path<6>[bounce,bend left,hlhit] \TBounce{d_0}{}{d_1}{.south};
+  \only<7>{\THit{c_1}{bend left=20pt,hlhit}{b_0}{.west}{b_1}}
+  \path<7>[bounce,bend left,hlhit] \TBounce{b_0}{}{b_1}{.south};
+  \only<8>{\THit{b_1}{hlhit}{d_1}{.west}{d_2}}
+  \path<8>[bounce,bend left,hlhit] \TBounce{d_1}{}{d_2}{.south};
 \end{tikzpicture}
 }
 \end{center}
@@ -47,13 +54,14 @@ Successive reachability of processes:
 \end{column}
 \begin{column}{0.45\textwidth}
 
-\pause
-~\\~\\~\\~\\
+%\pause
+~\\~\\
 \begin{itemize}
-  \item Initial context
-    \\ \rex{\PHetat{a_1, \{b_0, b_1\}, c_0, z_0}} \pause
+  \item Initial state
+    \\ \rex{\PHetat{a_1, b_0, c_0, d_0}} \pause
   \item Objectives
-    \\ \rex{$[\ \Rsh d_1 \PHconcat\ \Rsh b_1 \PHconcat\ \Rsh d_2\ ]$} \pause
+    \\ \rex{$[\ \Rsh d_1\ \PHconcat\ \Rsh d_2\ ]$} \pause
+    \\\smallskip \rex{$[\ \Rsh d_1 \PHconcat\ \Rsh b_1 \PHconcat\ \Rsh d_2\ ]$} \pause
     \\\smallskip \rex{$[\ \Rsh d_2\ ]$} \pause
 \end{itemize}
 
@@ -65,12 +73,12 @@ Successive reachability of processes:
 \f Concretization of the objective = scenario
 
 \ex{
-\only<5>{\underline{$\PHfrappe{a_0}{c_0}{c_1}$}}\only<-4,6->{$\PHfrappe{a_0}{c_0}{c_1}$}~\PHconcat~
-\only<6>{\underline{$\PHfrappe{b_0}{d_0}{d_1}$}}\only<-5,7->{$\PHfrappe{b_0}{d_0}{d_1}$}~\PHconcat~
-\only<7>{\underline{$\PHfrappe{c_1}{b_0}{b_1}$}}\only<-6,8->{$\PHfrappe{c_1}{b_0}{b_1}$}~\PHconcat~
-\only<8>{\underline{$\PHfrappe{b_1}{d_1}{d_2}$}}\only<-7,9->{$\PHfrappe{b_1}{d_1}{d_2}$}}
+$ \only<5>{\underline{\PHfrappe{a_0}{c_0}{c_1}}} \only<-4,6->{\PHfrappe{a_0}{c_0}{c_1}} \PHconcat %
+  \only<6>{\underline{\PHfrappe{b_0}{d_0}{d_1}}}\only<-5,7->{\PHfrappe{b_0}{d_0}{d_1}} \PHconcat %
+  \only<7>{\underline{\PHfrappe{c_1}{b_0}{b_1}}}\only<-6,8->{\PHfrappe{c_1}{b_0}{b_1}} \PHconcat %
+  \only<8>{\underline{\PHfrappe{b_1}{d_1}{d_2}}}\only<-7,9->{\PHfrappe{b_1}{d_1}{d_2}}
+$}
 \end{center}
-
 \end{frame}
 
 

@@ -15,7 +15,7 @@
 \tikzstyle{hlhit}=[transparent]
 \begin{center}\scalebox{\scaleex}{
 \begin{tikzpicture}
-\exphdef
+  \exphdef
 \end{tikzpicture}
 }\end{center}
 }
@@ -31,7 +31,7 @@
 \tikzstyle{hlhit}=[transparent]
 \begin{center}\scalebox{\scaleex}{
 \begin{tikzpicture}
-\exphdef
+  \exphdef
 \end{tikzpicture}
 }\end{center}
 }
@@ -44,9 +44,9 @@
 \tikzstyle{hlhit}=[transparent]
 \begin{center}\scalebox{\scaleex}{
 \begin{tikzpicture}
-\exphdef
+  \exphdef
 
-\TState{3}{a_0,b_1,z_0}
+  \TState{3}{a_0,b_1,z_0}
 \end{tikzpicture}
 }\end{center}
 }
@@ -61,10 +61,23 @@
 \begin{center}\scalebox{\scaleex}{
 \begin{tikzpicture}
 \exphdef
-\TState{4}{a_0,b_1,z_0}
-\TState{5}{a_0,b_1,z_1}
-\TState{6}{a_1,b_1,z_1}
-\TState{7}{a_1,b_1,z_2}
+  \TState{4-5}{a_0,b_1,z_0}
+  \TState{6}{a_0,b_1,z_1}
+  \TState{7}{a_1,b_1,z_1}
+  \TState{8}{a_1,b_1,z_2}
+
+  \only<5>{
+    \THit{b_1}{hl}{z_0}{.west}{z_1}
+    \path[bounce,bend left,hl] \TBounce{z_0}{}{z_1}{.south};
+  }
+  \only<6>{
+    \THit{a_0}{out=250,in=200,selfhit,hl}{a_0}{.west}{a_1}
+    \path[bounce,bend left,hl] \TBounce{a_0}{}{a_1}{.south};
+  }
+  \only<7>{
+    \THit{a_1}{hl}{z_1}{.west}{z_2}
+    \path[bounce,bend left,hl] \TBounce{z_1}{}{z_2}{.south};
+  }
 \end{tikzpicture}
 }\end{center}
 }
@@ -76,12 +89,12 @@
   \item \tval{Processes}: local states / levels of expression \qex{$z_0$, $z_1$, $z_2$}
 \pause[3]
   \item \tval{States}: sets of active processes%
-  \only<3-4>{\qex{$\PHetat{a_0, b_1, z_0}$}}%
-  \only<5>{\qex{$\PHetat{a_0, b_1, z_1}$}}%
-  \only<6>{\qex{$\PHetat{a_1, b_1, z_1}$}}%
-  \only<7>{\qex{$\PHetat{a_1, b_1, z_2}$}}%
+  \only<3-5>{\qex{$\PHetat{a_0, b_1, z_0}$}}%
+  \only<6>{\qex{$\PHetat{a_0, b_1, z_1}$}}%
+  \only<7>{\qex{$\PHetat{a_1, b_1, z_1}$}}%
+  \only<8>{\qex{$\PHetat{a_1, b_1, z_2}$}}%
 \pause[4]
-  \item \tval{Actions}: dynamics \qex{\only<4>{\underline}{$\PHfrappe{b_1}{z_0}{z_1}$}, \only<4-5>{\underline}{$\PHfrappe{a_0}{a_0}{a_1}$}, \only<6>{\underline}{$\PHfrappe{a_1}{z_1}{z_2}$}}
+  \item \tval{Actions}: dynamics \qex{\only<5>{\underline}{$\PHfrappe{b_1}{z_0}{z_1}$}, \only<6>{\underline}{$\PHfrappe{a_0}{a_0}{a_1}$}, \only<7>{\underline}{$\PHfrappe{a_1}{z_1}{z_2}$}}
 \end{liste}
 \end{frame}
 
@@ -93,21 +106,42 @@
 
 \begin{center}\scalebox{\scaleex}{
 \begin{tikzpicture}
-\exphcoop
+  \exphcoop
+  
+  \TState{9}{a_1,b_1}
+  \TState{10}{a_1,b_1,ab_0}
+  \TState{11}{a_1,b_1,ab_1}
+  \TState{12}{a_1,b_1,ab_3}
+  
+  \only<9>{
+    \node[hl process] at (ab_0.center) {};
+    \node[hl process] at (ab_1.center) {};
+    \node[hl process] at (ab_2.center) {};
+    \node[current process] at (ab_3.center) {};
+  }
+  
+  \only<10>{
+    \THit{b_1}{hl}{ab_0}{.210}{ab_1}
+    \path[bounce,bend left,hl] \TBounce{ab_0}{}{ab_1}{.240} ;
+  }
+  
+  \only<11>{
+    \THit{a_1}{hl}{ab_1}{.160}{ab_3}
+    \path[bounce,bend left,hl] \TBounce{ab_1}{}{ab_3}{.south west} ;
+  }
 \end{tikzpicture}
 }\end{center}
 
 \medskip
-\only<-14>{
 \begin{liste}
-  \item How to introduce some \tval{cooperation} between sorts? \qex{$\PHfrappe{a_1 \wedge b_0}{z_1}{z_2}$}
-\pause[4]
-  \item Solution: a \tval{cooperative sort} \qex{$ab$} \only<12->{\quad to express \qex{$a_1 \wedge b_0$}}
-\pause[8]
-  \item Constraint: each configuration is represented by one process \qex{$\PHetat{a_1,b_0} \pause[11]\Rightarrow ab_{10}$}
-\pause[14]
-  \item Advantage: regular sort; drawbacks: complexity, temporal shift
-\end{liste}}
+  \item \tval{Cooperation} between \ex{$a_1$} and \ex{$b_1$}: \qex{$\PHfrappe{\underline{a_1 \wedge b_1}}{z_0}{z_1}$}
+\pause[5]
+  \item Solution: a \tval{cooperative sort} \qex{$ab$} \quad to express \qex{$\underline{a_1 \wedge b_1}$}
+\pause[9]
+  \item Constraint: each configuration is represented by one process \qex{$\underline{a_1 \wedge b_1} \Rightarrow ab_{11}$}
+%\pause[15]
+%  \item Advantage: regular sort; drawbacks: complexity, temporal shift
+\end{liste}
 \end{frame}
 
 
@@ -136,10 +170,10 @@
   \end{fleches}
 
   \smallskip
-  \item (Future) extensions
+  \item Extensions
   \begin{fleches}
-    \item Actions with priorities
-    \item Continuous time with clocks?
+    \item Prioritized actions
+    \item Stochastic actions
   \end{fleches}
 \end{itemize}
 

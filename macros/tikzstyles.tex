@@ -8,40 +8,11 @@
 \usetikzlibrary{decorations.text}
 \usetikzlibrary{decorations.pathmorphing}
 
+\usetikzlibrary{arrows,shapes}
 
-\def\Pint{\textsc{PINT}}
-\def\PH{\mathcal{PH}}
+\definecolor{lightgray}{rgb}{0.8,0.8,0.8}
+\definecolor{lightgrey}{rgb}{0.8,0.8,0.8}
 
-\tikzstyle{sort}=[fill=lightgray, rounded corners, draw=black]
-\tikzstyle{process}=[circle,draw,minimum size=15pt,font=\footnotesize,inner sep=1pt]
-\tikzstyle{black process}=[process, draw=blue, fill=red,text=black,font=\bfseries]
-\tikzstyle{highlighted process}=[current process, fill=gray]
-\tikzstyle{process box}=[fill=none,draw=black,rounded corners]
-\tikzstyle{current process}=[process,fill=blue]
-\tikzstyle{tick label}=[font=\footnotesize]
-\tikzstyle{tick}=[densely dotted]
-\tikzstyle{hit}=[->,>=angle 45]
-\tikzstyle{selfhit}=[min distance=30pt,curve to]
-\tikzstyle{bounce}=[densely dotted,>=stealth',->]
-\tikzstyle{hlhit}=[very thick]
-\tikzstyle{ulhit}=[draw=lightgray,fill=lightgray]
-\tikzstyle{pulhit}=[fill=lightgray]
-\tikzstyle{bulhit}=[draw=lightgray]
-
-\tikzstyle{hitless graph}=[every edge/.style={draw=red,-}]
-
-\tikzstyle{aS}=[every edge/.style={draw,->}]
-\tikzstyle{Asol}=[draw,circle,minimum size=5pt,inner sep=0]
-\tikzstyle{Aproc}=[draw]
-\tikzstyle{Aobj}=[]
-
-\renewcommand{\TState}[2]{
-  \foreach \proc in {#2} {
-        \only<#1>{ \node[current process] (\proc) at (\proc.center) {}; }
-  };
-}
-
-%\definecolor{darkred}{rgb}{0.5,0,0}
 \definecolor{lightred}{rgb}{1,0.8,0.8}
 \definecolor{lightgreen}{rgb}{0.7,1,0.7}
 \definecolor{darkgreen}{rgb}{0,0.5,0}
@@ -49,7 +20,9 @@
 \definecolor{darkyellow}{rgb}{0.5,0.5,0}
 \definecolor{lightyellow}{rgb}{1,1,0.6}
 \definecolor{darkcyan}{rgb}{0,0.6,0.6}
+\definecolor{lightcyan}{rgb}{0.6,1,1}
 \definecolor{darkorange}{rgb}{0.8,0.2,0}
+\definecolor{notsodarkred}{rgb}{0.8,0,0}
 
 \definecolor{notsodarkgreen}{rgb}{0,0.7,0}
 
@@ -64,10 +37,66 @@
 \colorlet{colorinhgray}{lightred}
 
 \colorlet{colorgray}{lightgray}
+\colorlet{colorhl}{blue}
+
+
+\tikzstyle{boxed ph}=[]
+\tikzstyle{sort}=[fill=lightgray, rounded corners, draw=black]
+\tikzstyle{process}=[circle,draw,minimum size=15pt,fill=white,font=\footnotesize,inner sep=1pt]
+%\tikzstyle{black process}=[process, draw=blue, fill=red,text=black,font=\bfseries]
+\tikzstyle{gray process}=[process, draw=black, fill=lightgray]
+\tikzstyle{highlighted process}=[current process, fill=gray]
+\tikzstyle{process box}=[fill=none,draw=black,rounded corners]
+%\tikzstyle{current process}=[process, draw=black, fill=lightgray]
+\tikzstyle{current process}=[process,fill=blue]
+\tikzstyle{hl process}=[process,fill=blue!30]
+\tikzstyle{tick label}=[font=\footnotesize]
+\tikzstyle{tick}=[densely dotted] %-
+\tikzstyle{hit}=[->,>=angle 45]
+\tikzstyle{selfhit}=[min distance=50pt,curve to]
+\tikzstyle{bounce}=[densely dotted,>=stealth',->]
+\tikzstyle{ulhit}=[draw=lightgray,fill=lightgray]
+\tikzstyle{pulhit}=[fill=lightgray]
+\tikzstyle{bulhit}=[draw=lightgray]
+\tikzstyle{hl}=[very thick,colorhl]
+\tikzstyle{hlb}=[very thick]
+\tikzstyle{hlhit}=[hl]
+%\tikzstyle{hl2}=[hl]
+%\tikzstyle{nohl}=[font=\normalfont,thin]
+
+\tikzstyle{update}=[draw,->,dashed,shorten >=.7cm,shorten <=.7cm]
+
+\tikzstyle{unprio}=[draw,thin]%[double]
+%\tikzstyle{prio}=[draw,thick,-stealth]%[double]
+\tikzstyle{prio}=[draw,-stealth,double]
+
+\tikzstyle{hitless graph}=[every edge/.style={draw=red,-}]
+
+\tikzstyle{aS}=[every edge/.style={draw,->,>=stealth}]
+\tikzstyle{Asol}=[draw,circle,minimum size=5pt,inner sep=0,node distance=1cm]
+\tikzstyle{Aproc}=[draw,node distance=1.2cm]
+\tikzstyle{Aobj}=[node distance=1.5cm]
+\tikzstyle{Anos}=[font=\Large]
+
+\tikzstyle{AsolPrio}=[Asol,double]
+\tikzstyle{AprocPrio}=[Aproc,double]
+\tikzstyle{aSPrio}=[aS,double]
+
+\colorlet{colorhlwarn}{notsodarkred}
+\colorlet{colorhlwarnbg}{lightred}
+\tikzstyle{Ahl}=[very thick,fill=colorhlwarnbg,draw=colorhlwarn,text=colorhlwarn]
+\tikzstyle{Ahledge}=[very thick,double=colorhlwarnbg,draw=colorhlwarn,color=colorhlwarn]
+
+
+
+
+
+%\definecolor{darkred}{rgb}{0.5,0,0}
+
 
 
 \tikzstyle{grn}=[every node/.style={circle,draw=black,outer sep=2pt,minimum
-                size=15pt,text=black}, node distance=1.5cm]
+                size=15pt,text=black}, node distance=1.5cm, ->]
 \tikzstyle{inh}=[>=|,-|,draw=colorinh,thick, text=black,label]
 \tikzstyle{act}=[->,>=triangle 60,draw=coloract,thick,color=coloract]
 \tikzstyle{inhgray}=[>=|,-|,draw=colorinhgray,thick, text=black,label]
@@ -80,15 +109,16 @@ minimum size=10pt, outer sep=0, font=\scriptsize, draw=none]
 
 
 \tikzstyle{plot}=[every path/.style={-}]
-\tikzstyle{axe}=[gray,->,>=stealth']
-\tikzstyle{ticks}=[font=\scriptsize,every node/.style={gray}]
+\tikzstyle{axe}=[black,->,>=stealth']
+\tikzstyle{ticks}=[font=\scriptsize,every node/.style={black}]
 \tikzstyle{mean}=[thick]
 \tikzstyle{interval}=[line width=5pt,red,draw opacity=0.7]
-\definecolor{lightred}{rgb}{1,0.3,0.3}
+%\definecolor{lightred}{rgb}{1,0.3,0.3}
 
-\tikzstyle{hl}=[yellow]
-\tikzstyle{hl2}=[orange]
+%\tikzstyle{hl}=[yellow]
+%\tikzstyle{hl2}=[orange]
 
-\tikzstyle{every matrix}=[ampersand replacement=\&]
-\tikzstyle{shorthandoff}=[]
-\tikzstyle{shorthandon}=[]
+%\tikzstyle{every matrix}=[ampersand replacement=\&]
+%\tikzstyle{shorthandoff}=[]
+%\tikzstyle{shorthandon}=[]
+\tikzstyle{objective}=[process,very thick,fill=yellow!50]
