@@ -1,0 +1,74 @@
+% Nouvelle inférence
+
+
+
+\begin{frame}[c]
+  \frametitle{Improved IG inference}
+  \framesubtitle{Submitted to TCS}
+
+Revision of the IG inference:
+
+\medskip
+Focus on the \tval{evolution} (increase/decrease)
+
+\quad instead of focal points (which may not exist)
+
+\medskip
+Definitions based on \tcite{\rcite}
+
+\medskip
+\begin{figure}
+\scalebox{.8}{
+\begin{tikzpicture}
+  \path[use as bounding box] (-0.5,-0.5) rectangle (3.5,2.5);
+  \TSort{(0,0)}{a}{2}{l}
+  \TSort{(3,0)}{b}{3}{r}
+  \THit{a_1}{}{b_0}{.west}{b_1}
+  \THit{a_1}{}{b_1}{.west}{b_2}
+  \path[bounce,bend left] \TBounce{b_0}{}{b_1}{.south} \TBounce{b_1}{}{b_2}{.south} ;
+  
+  \TState{1-}{a_1, b_0}
+  \node<2>[current process,fill=colora0] (hb_2) at (b_2.center) {};
+  \path<2>[bounce,bend left,very thick,darkgreen] \TBounce{b_0}{}{b_1}{.south} \TBounce{b_1}{}{b_2}{.south} ;
+  \node<3>[current process,fill=colora0] (hb_1) at (b_1.center) {};
+  \path<3>[very thick,draw=darkgreen,->] (4,0) -- (4,1) ;
+\end{tikzpicture}
+}\end{figure}
+\end{frame}
+
+
+
+\begin{frame}[c]
+  \frametitle{Improved IG inference}
+  \framesubtitle{Submitted to TCS}
+
+
+3 major improvements:
+
+\bigskip
+\cth{1)} Respects both “Thomas conjectures”
+
+\begin{itemize}
+  \item Sustained oscillations $\Rightarrow$ negative circuit in the IG
+  \item Several steady-states $\Rightarrow$ positive circuit in the IG
+\end{itemize}
+
+\bigskip
+\cth{2)} Handles a wider class of models
+
+\begin{itemize}
+  \item Focal points are sometimes too restrictive
+  \item Support of “unsigned edges”\\
+        which are more complex than just activations of inhibitions
+\end{itemize}
+
+\bigskip
+
+\cth{3)} Abstraction levels
+
+\begin{itemize}
+  \item Interaction Graph --- no logic gates (and/or) between components
+  \item Process Hitting --- partially defined logic gates (permissive)
+  \item Thomas models --- fully defined logic gates (full parametrization)
+\end{itemize}
+\end{frame}

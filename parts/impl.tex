@@ -1,34 +1,4 @@
-% Pistes d'implémentation
-
-\begin{frame}[c]
-  \frametitle{ASP Implementation}
-
-\tval{ASP}: Declarative programming
-
-\quad Rule: \ex{$head \leftarrow \only<1>{body}\only<2->{A_1, ..., A_n, \neg A_{n+1}, ..., \neg A_m}.$}
-
-\quad Fact: \ex{$head.$}
-
-\quad Constraint: \ex{$\leftarrow body.$}
-
-\quad Aggregate: \ex{$lower~\{~atoms~\}~upper \leftarrow body.$}
-
-\pause[3]
-\bigskip
-Representation of PH / BRNs:
-
-\quad Gene: \ex{$component(a, n).$}
-
-\quad Action: \ex{$action(a, i, b, j, k).$}
-
-\quad Cooperation: \ex{$cooperation(c, a, i, j).$}
-
-\quad Useful rules: \ex{$component\_levels(X, 0..M) \leftarrow component(X, M).$}
-\end{frame}
-
-
-
-% Pistes d'implémentation
+% Pistes d'implémentation et performances
 
 \newcommand{\aspla}{\leftarrow}
 
@@ -83,7 +53,7 @@ $min\ \{\ atom : enum\ \}\ max \aspla body.$
 \pause
 \bigskip
 
-Method: \cth{1)} Enumerate of all combinations:
+Method: \cth{1)} \tval{Enumerate} of all combinations:
 
 \ex{%
 ~~~$color(red).\ color(green).\ color(blue).$\\
@@ -101,7 +71,7 @@ SATISFIABLE: 27 models
 \pause
 \bigskip
 
-~\phantom{Method:}\cth{2)} Then filter the answers with constraints:
+~\phantom{Method:}\cth{2)} Then \tval{filter} the answers with constraints:
 
 \ex{%
 ~~~$\bot \aspla attrib(X,C), attrib(Y,C), edge(X,Y).$
@@ -122,19 +92,27 @@ SATISFIABLE: 6 models
   \frametitle{Enumerating admissible Parametrizations}
   \framesubtitle{Implementation}
 
-PH / GRN definitions:
+\tval{PH / GRN definitions}:
 
 \ex{%
 ~~~$component(a, 2).$\\
 ~~~$component(b, 1).$\\
 ~~~$action(b, 1, a, 1, 2).$
 }
-
-\todo{Illustrations TikZ}
+\scalebox{.7}{
+\begin{tikzpicture}
+%  \path[draw,use as bounding box] (-0.5,-0.5) rectangle (3.5,2.5);
+  \path[use as bounding box] (-6,0) rectangle (-6.5,0);
+  \TSort{(0,0)}{a}{3}{l}
+  \TSort{(3,0)}{b}{2}{r}
+  \THit{b_1}{}{a_1}{.east}{a_2}
+  \path[bounce,bend right] \TBounce{a_1}{}{a_2}{.south} ;
+\end{tikzpicture}
+}
 
 \pause
 \bigskip
-Useful rules:
+\tval{Useful rules}:
 
 \ex{%
 ~~~$component\_levels(X, 0..M) \aspla component(X, M).$\\
@@ -144,7 +122,8 @@ Useful rules:
 
 \pause
 \bigskip
-Parameters enumeration with cardinalities:
+\tval{Enumerate} all possible parameters (cardinalities):
+%Parameters enumeration with cardinalities:
 
 \ex{%
 ~~~$1\ \{\ param(X, P, I) : component\_levels(X, I)\ \}\ \infty\aspla param\_label(X, P).$
@@ -154,140 +133,51 @@ Parameters enumeration with cardinalities:
 
 \pause
 \bigskip
-Parametrizations filtering with constraints:
+%Parametrizations filtering with constraints:
+\tval{Filter} non-monotonic parameters (constraints):
 
 \ex{%
 ~~~$\bot \aspla less\_active(X, P, Q), not param\_inf(X, P, Q).$
 }
 
 [$X$: component, $P$, $Q$: parameter labels]
-
-\end{frame}
-
-
-
-
-\begin{comment}
-\begin{frame}[c]
-  \frametitle{ASP Implementation}
-
-\tval{ASP}: Declarative programming
-
-\quad Rule: \texttt{\ex{head :- \only<1>{body}\only<2->{A$_1$, ..., A$_n$, $\neg$A$_{n+1}$, ..., $\neg$A$_m$}.}}
-
-\quad Fact: \texttt{\ex{head.}}
-
-\quad Constraint: \texttt{\ex{:- body.}}
-
-\pause[3]
-\bigskip
-Example:
-
-\texttt{\ex{%
-~~~node(a). node(b). node(c).\\
-~~~edge(a, b). edge(b, c). edge(a, c).\\
-~~~edge(X,Y) :- edge(Y,X).
-}}
-
-\bigskip
-Solving: find the biggest set of atoms satisfying the problem
-
-\texttt{\console{%
-~~~node(a) node(c) node(b)\\
-~~~edge(a, b) edge(b, c) edge(a, c)\\
-~~~edge(b, a) edge(c, b) edge(c, a)\\
-}}
-
 \end{frame}
 
 
 
 \begin{frame}[c]
-  \frametitle{ASP Implementation}
+  \frametitle{Implementation}
 
-\tval{Cardinalities}: \quad
-\texttt{\ex{%
-\textit{min} \{ atom : enum \} \textit{max} :- body.
-}}
+\tval{Workflow}:
+\begin{itemize}
+  \item Read and translate the models with \tval{OCaml}\\
+        \quad\f Integrated to \Pint\\
+  \item Express the problem in \tval{ASP} (logic programming)\\
+        \quad\f Solved with \tval{Clingo} (\tval{Gringo} + \tval{Clasp})
+\end{itemize}
+
+\bigskip
+\tval{Complexity}: linear in the number of genes, exponential in the number of regulators of one gene
 
 \pause
 \bigskip
+\small
+\begin{tabular}{r||r@{+}l|c|c||c|c||c|c|}
+\multicolumn{5}{c||}{Model specifications} & \multicolumn{2}{c||}{IG inference} & \multicolumn{2}{c|}{Parameters inference}\\
+\hline
+\tval{Name} & S & CS & P & A & $\Delta t$ & Edges & $\Delta t$ & Parameters\\
+\hline
+  \tval{\ex{egfr20}} & \tval{20} & 22 & 152 & 399 & \tval{1s} & 50 & \tval{1s} & 191\\
+\hline
+  \tval{\ex{tcrsig40}} & \tval{40} & 14 & 156 & 301 & \tval{1s} & 54 & \tval{1s} & 143\\
+\hline
+  \tval{\ex{tcrsig94}} & \tval{94} & 39 & 448 & 1124 & \tval{13s} & 169 & $\infty$ & $2.10^9$\\
+\hline
+  \tval{\ex{egfr104}} & \tval{104} & 89~ & 748 & 2356 & \tval{4min} & 241 & \tval{1min 30s} & $1.10^6 / 2.10^6$\\
+\hline
+\end{tabular}
 
-\f Enumerate of all combinations:
+S = Sorts \quad CS = Cooperative sorts \quad P = Processes \quad A = Actions
 
-\texttt{\ex{%
-~~~color(red;green;blue).\\
-~~~1 {attrib(X,C) : color(C)} 1 :- node(X).
-}}
-
-\texttt{\console{%
-Answer~1:~attrib(b,red) attrib(c,red) attrib(a,red)\\
-Answer~2:~attrib(b,red) attrib(c,red) attrib(a,blue)\\
-Answer~3:~attrib(b,red) attrib(c,green) attrib(a,blue)\\
-~~~$\vdots$\\
-SATISFIABLE: 27 models
-}}
-
-\pause
-\bigskip
-
-\f Then reduce the number of answers with constraints:
-
-\texttt{\ex{%
-~~~:- attrib(X,C), attrib(Y,C), edge(X,Y).
-}}
-
-\texttt{\console{%
-Answer~1:~attrib(b,green) attrib(c,blue) attrib(a,red)\\
-Answer~2:~attrib(b,green) attrib(c,red) attrib(a,blue)\\
-Answer~3:~attrib(b,blue) attrib(c,green) attrib(a,red)\\
-~~~$\vdots$\\
-SATISFIABLE: 6 models
-}}
-
+\cmodels
 \end{frame}
-
-
-\begin{frame}[c]
-  \frametitle{Enumerating admissible Parametrizations}
-  \framesubtitle{Implementation}
-
-PH / GRN definitions:
-
-\texttt{\ex{%
-~~~component(a, 2).\\
-~~~component(b, 1).\\
-~~~action(b, 1, a, 1, 2).
-}}
-
-\bigskip
-Useful rules:
-
-\texttt{\ex{%
-~~~component\_levels(X, 0..M) :- component(X, M).\\
-~~~less\_active(X, P, Q) :-}} $K_{\texttt{X},\texttt{P}}$\text{ has less activators than }$K_{\texttt{X},\texttt{Q}}$\texttt{\ex{\\
-~~~param\_inf(X, P, Q) :-}} $K_{\texttt{X},\texttt{P}} \preccurlyeq K_{\texttt{X},\texttt{Q}}$
-
-\pause
-\bigskip
-Parameters enumeration with cardinalities:
-
-\texttt{\ex{%
-~~~1 \{ param(X, P, I) : component\_levels(X, I) \} :-\\
-~~~~~param\_label(X, P).
-}}
-
-[\texttt{X}: component, \texttt{P}: parameter label, \texttt{I}: parameter value]
-
-\pause
-\bigskip
-Parametrizations filtering with constraints:
-
-\texttt{\ex{%
-~~~:- less\_active(X, P, Q), not param\_inf(X, P, Q).
-}}
-
-[\texttt{X}: component, \texttt{P}, \texttt{Q}: parameter labels]
-
-\end{frame}
-\end{comment}

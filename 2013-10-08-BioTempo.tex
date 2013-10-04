@@ -103,11 +103,14 @@
 % Style des citations
 \newcommand{\tscite}[1]{\textcolor{couleurcit}{#1}}
 \newcommand{\tcite}[1]{\textcolor{couleurcit}{[#1]}}
+\newcommand{\tcitebullet}{~~$\textcolor{couleurtheme}{\bullet}$~}
 
-\newcommand{\cpmrtcsb}{Paulevé, Magnin, Roux in Transactions on Computational Systems Biology, 2011}
-\newcommand{\cpmrmscs}{Paulevé, Magnin, Roux in Mathematical Structures in Computer Science, 2012}
-\newcommand{\cfpimrcmsb}{{\scriptsize Folschette, Paulevé, Inoue, Magnin, Roux in Computational Methods in Systems Biology, 2012}}
-\newcommand{\crcbmfma}{Richard, Comet, Bernot in Modern Formal Methods and App., 2006}
+\newcommand{\cpmrtcsb}{Paulevé \textit{et al.} in Transactions on Computational Systems Biology, 2011}
+\newcommand{\cpmrmscs}{Paulevé \textit{et al.} in Mathematical Structures in Computer Science, 2012}
+\newcommand{\cfpimrcmsb}{Folschette \textit{et al.} in Computational Methods in Systems Biology, 2012}
+\newcommand{\crcbmfma}{Richard \textit{et al.} in Modern Formal Methods and App., 2006}
+\newcommand{\bccdmr}{Bernot \textit{et al.} in Concurrent Models in Molecular Biology, 2007}
+\newcommand{\rcite}{Richard in Advances in Applied Mathematics, 2010}
 
 
 % Style de texte mis en valeur
@@ -122,9 +125,9 @@
 
 
 
-\newcommand{\thedate}{2013/03/27}
+\newcommand{\thedate}{2013/10/08}
 \date{\thedate}
-\conference{ASSB'13/Student workshop}{Advances in Systems and Synthetic Biology\\Modelling Complex Biological Systems in the Context of Genomics\\Thematic Research School 2013\\--- Student workshop ---}
+\conference{BioTempo}{Réunion ANR BioTempo}
 \title[Introduction to the PH and inference of its underlying BRN]{Introduction to the Process Hitting and inference of its underlying Biological Regulatory Network}
 \author{Maxime FOLSCHETTE}
 
@@ -243,18 +246,20 @@ Loïc PAULEVÉ, Katsumi INOUE, Morgan MAGNIN, Olivier ROUX
 
 \section{Frameworks Definitions}
 \subsection{The Process Hitting framework}
-%\input{parts/def_ph.tex}
+\input{parts/def_ph.tex}
 \subsection{Thomas Modeling}
-%\input{parts/def_thomas.tex}
+\input{parts/def_thomas.tex}
 
 \section{Translating a Process Hitting into a BRN}
-%\input{parts/inf.tex}
+\input{parts/inf.tex}
 \subsection{Interaction Graph Inference}
-%\input{parts/inf_ig.tex}
+\input{parts/inf_ig.tex}
 \subsection{Parametrization Inference}
-%\input{parts/inf_param.tex}
+\input{parts/inf_param.tex}
 \subsection{Implementation}
 \input{parts/impl.tex}
+\subsection{New inference}
+\input{parts/new_inf.tex}
 
 \section{Summary \& Conclusion}
 \input{parts/ccl.tex}
@@ -262,7 +267,7 @@ Loïc PAULEVÉ, Katsumi INOUE, Morgan MAGNIN, Olivier ROUX
 \section[x]{Bibliography}
 \input{parts/biblio.tex}
 \section[Annex: Graphs of local causality]{Graphs of local causality}
-%\input{parts/annex_static.tex}
-%\input{parts/annex_ph.tex}
+\input{parts/annex_static.tex}
+\input{parts/annex_ph.tex}
 
 \end{document}
