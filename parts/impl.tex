@@ -30,6 +30,144 @@ Representation of PH / BRNs:
 
 % Pistes d'implémentation
 
+\newcommand{\aspla}{\leftarrow}
+
+\begin{frame}[c]
+  \frametitle{ASP Implementation}
+
+\tval{ASP}: Declarative programming
+
+\medskip
+\quad \tval{Rule}: \ex{$head \aspla \only<1>{body}\only<2->{A_1, ..., A_n, \neg A_{n+1}, ..., \neg A_m}.$}
+
+\pause[3]
+\quad \tval{Fact}: \ex{$head\only<3>{ \aspla \top}.$}
+
+\pause[5]
+\quad \tval{Constraint}: \ex{$\bot \aspla body.$}
+
+\pause[6]
+\bigskip
+Example:
+
+\ex{%
+~~~$node(a).\ node(b).\ node(c).$\\
+~~~$edge(a, b).\ edge(b, c).\ edge(a, c).$\\
+~~~$edge(X,Y) \aspla edge(Y,X).$
+}
+
+\pause
+\bigskip
+Solving: find the biggest set of atoms satisfying the problem
+
+\texttt{\console{%
+~~~node(a)\ node(c)\ node(b)\\
+~~~edge(a,b)\ edge(b,c)\ edge(a,c)\\
+~~~edge(b,a)\ edge(c,b)\ edge(c,a)\\
+SATISFIABLE: 1 model
+}}
+\end{frame}
+
+
+
+\begin{frame}[c]
+  \frametitle{ASP Implementation}
+
+\tval{Cardinalities}: \quad
+\ex{%
+$min\ \{\ atom : enum\ \}\ max \aspla body.$
+}\\
+\quad$\Rightarrow$ Enumerate all atoms of the form \ex{$atom$} according to the variables of \ex{$enum$}.\\
+\quad$\Rightarrow$ Keep between \ex{$min$} and \ex{$max$} possibilities.
+
+\pause
+\bigskip
+
+Method: \cth{1)} Enumerate of all combinations:
+
+\ex{%
+~~~$color(red).\ color(green).\ color(blue).$\\
+~~~$1\ \{\ attrib(X,C) : color(C)\ \}\ 1 \aspla node(X).$
+}
+
+\texttt{\console{%
+Answer~1:~attrib(b,red) attrib(c,red) attrib(a,red)\\
+Answer~2:~attrib(b,red) attrib(c,red) attrib(a,blue)\\
+Answer~3:~attrib(b,red) attrib(c,green) attrib(a,blue)\\
+~~~$\vdots$\\
+SATISFIABLE: 27 models
+}}
+
+\pause
+\bigskip
+
+~\phantom{Method:}\cth{2)} Then filter the answers with constraints:
+
+\ex{%
+~~~$\bot \aspla attrib(X,C), attrib(Y,C), edge(X,Y).$
+}
+
+\texttt{\console{%
+Answer~1:~attrib(b,green) attrib(c,blue) attrib(a,red)\\
+Answer~2:~attrib(b,green) attrib(c,red) attrib(a,blue)\\
+Answer~3:~attrib(b,blue) attrib(c,green) attrib(a,red)\\
+~~~$\vdots$\\
+SATISFIABLE: 6 models
+}}
+\end{frame}
+
+
+
+\begin{frame}[c]
+  \frametitle{Enumerating admissible Parametrizations}
+  \framesubtitle{Implementation}
+
+PH / GRN definitions:
+
+\ex{%
+~~~$component(a, 2).$\\
+~~~$component(b, 1).$\\
+~~~$action(b, 1, a, 1, 2).$
+}
+
+\todo{Illustrations TikZ}
+
+\pause
+\bigskip
+Useful rules:
+
+\ex{%
+~~~$component\_levels(X, 0..M) \aspla component(X, M).$\\
+~~~$less\_active(X, P, Q) \aspla \textcolor{black}{K_{X,P} \text{ has less activators than } K_{X,Q}}$\\
+~~~$param\_inf(X, P, Q) \aspla \textcolor{black}{K_{X,P} \preccurlyeq K_{X,Q}}$
+}
+
+\pause
+\bigskip
+Parameters enumeration with cardinalities:
+
+\ex{%
+~~~$1\ \{\ param(X, P, I) : component\_levels(X, I)\ \}\ \infty\aspla param\_label(X, P).$
+}
+
+[$X$: component, $P$: parameter label, $I$: parameter value]
+
+\pause
+\bigskip
+Parametrizations filtering with constraints:
+
+\ex{%
+~~~$\bot \aspla less\_active(X, P, Q), not param\_inf(X, P, Q).$
+}
+
+[$X$: component, $P$, $Q$: parameter labels]
+
+\end{frame}
+
+
+
+
+\begin{comment}
 \begin{frame}[c]
   \frametitle{ASP Implementation}
 
@@ -152,3 +290,4 @@ Parametrizations filtering with constraints:
 [\texttt{X}: component, \texttt{P}, \texttt{Q}: parameter labels]
 
 \end{frame}
+\end{comment}
